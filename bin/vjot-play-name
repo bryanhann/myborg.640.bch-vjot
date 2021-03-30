@@ -1,0 +1,9 @@
+name=$1
+#echo [$0] name: $1
+stamp=$(vjot-stamp4name $name)
+#echo [$0] stamp: $stamp
+file=$(vjot-file4stamp $stamp)
+#echo [$0] file: $file
+vjot-play-file $file
+#vjot-play-stamp $stamp
+

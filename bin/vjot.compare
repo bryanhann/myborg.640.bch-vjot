@@ -1,0 +1,9 @@
+name=$1
+expected=$2
+received=$3
+[ "$expected" = "$received" ] && echo [PASS] $name || {
+    echo [FAIL] $name
+    echo expected: [$expected]
+    echo received: [$received]
+}
+

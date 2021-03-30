@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+killall ffplay 2> /dev/null
+(
+    (ffplay -nodisp -autoexit $1) > /dev/null 2> /dev/null
+    ( 
+        (speaker-test -t sine -c 2 -s 2 -f 20) & TASK_PID=$! 
+        (sleep 0.1) 
+        (kill -s SIGINT $TASK_PID) 
+    ) > /dev/null
+) &
+
+
+

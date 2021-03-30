@@ -1,0 +1,30 @@
+#!/bin/bash
+
+PROG=$(basename $0)
+msg () { echo "[$PROG]: $*"; }
+islinux () { echo ${OSTYPE} | grep -q linux ; }
+
+msg ++ [$*]
+
+ROOT=
+[ "$ROOT" = "" ] && ROOT=$(mydts uniq -r MYENV_SEAGATE_BLUE)/backups/rsync.ws852/
+[ "$ROOT" = "" ] && ROOT=$(mydts uniq -r MYENV_VJOT_DEPO)
+[ "$ROOT" = "" ] && msg CANNOT FIND ROOT && exit 1
+msg ROOT: $ROOT
+
+uniq4stamp () {
+    count=0
+    for hit in $(find $ROOT -name $1*mp3); do
+        count=$(( $count + 1  ))
+    done
+    [ $count = 1 ] && echo $hit
+    [ $count = 1 ] && return 0
+    [ $count = 1 ] || return 1
+}
+
+hit=$(uniq4stamp $1) && {
+    msg playing: $hit
+    islinux && pi.vjot-play-file  $hit
+    islinux || afplay $hit
+}
+

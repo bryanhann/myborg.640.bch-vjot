@@ -1,0 +1,1 @@
+[ "$HOSTNAME" == "pi7" ] && pi.vjot-play-file $*

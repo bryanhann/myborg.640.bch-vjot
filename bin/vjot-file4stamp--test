@@ -1,0 +1,2 @@
+vjot.compare $0 ${VJOT_SAMPLE_FILE} $(vjot-file4stamp $VJOT_SAMPLE_STAMP)
+

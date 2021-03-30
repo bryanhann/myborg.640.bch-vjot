@@ -1,0 +1,1 @@
+vjot-play-name $(basename $VJOT_SAMPLE_FILE)

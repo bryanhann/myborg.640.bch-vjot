@@ -1,0 +1,2 @@
+name=$(basename $VJOT_SAMPLE_FILE)
+vjot.compare $0 $VJOT_SAMPLE_STAMP $(vjot-stamp4name $name)

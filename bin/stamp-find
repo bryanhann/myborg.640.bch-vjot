@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import os
+import sys
+import argparse
+parser=argparse.ArgumentParser()
+parser.add_argument('stamp')
+parser.add_argument('--root', nargs=1, default='.', help='root directory of the search')
+parser.add_argument('--glob', nargs=1, default='*', help='a glob to restrict the search' )
+parser.add_argument('--unique', action='store_true', help='return only a unique hit')
+parser.add_argument('--exact', action='store_true', help='the stamp of a hit must match the given stamp exactly' )
+ARGS=parser.parse_args()
+
+def is_stamp(string):
+    try: 
+        date,time = string.split('T')
+        int('1' + date)
+        return len(date)==8
+    except ValueError: 
+        return False
+
+def is_stampedpath(path):
+    print(998, path)
+    stamp = path.name.split('.')[0]
+    return is_stamp(stamp)
+
+def iterate():
+    root = Path(ARGS.root[0])
+    glob = ARGS.glob[0]
+    root = Path(root)
+    for path in root.glob(glob):
+        stamp = path.name.split('.')[0]
+        if not stamp.startswith( ARGS.stamp ):
+            continue
+        if not is_stamp(stamp):
+            continue
+        if ARGS.exact and not stamp==ARGS.stamp:
+            continue
+        yield path
+
+def main():
+    hits = list(iterate())
+    if ARGS.unique and len(hits) != 1:
+        return
+    for hit in hits:
+        print(hit)
+
+def paths4stamp( stamp ):
+        yield
+
+if __name__ == '__main__':
+    main()

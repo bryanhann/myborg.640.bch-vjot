@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+
+import sys
+
+name=(sys.argv+[''])[1]
+stamp=name.split('.')[0]
+print(stamp)

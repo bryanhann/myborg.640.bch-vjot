@@ -1,0 +1,1 @@
+[ -d /media/pi/SeagateBlue/backups/rsync.ws852 ] && echo /media/pi/SeagateBlue/backups/rsync.ws852 && exit
