@@ -1,15 +1,18 @@
 #!/bin/bash
 
 PROG=$(basename $0)
+
 msg () { echo "[$PROG]: $*"; }
 islinux () { echo ${OSTYPE} | grep -q linux ; }
 
 msg ++ [$*]
 
-ROOT=
-[ "$ROOT" = "" ] && ROOT=$(mydts uniq -r MYENV_SEAGATE_BLUE)/backups/rsync.ws852/
-[ "$ROOT" = "" ] && ROOT=$(mydts uniq -r MYENV_VJOT_DEPO)
+BLUE=$( mydts uniq MYENV_SEAGATE_BLUE )
+DEPO=$( mydts uniq  MYENV_VJOT_DEPO )
+[ ! -z "${BLUE}" ] && ROOT=${BLUE}/backups/rsync.ws852
+[   -z "${BLUE}" ] && ROOT=${DEPO}
 [ "$ROOT" = "" ] && msg CANNOT FIND ROOT && exit 1
+
 msg ROOT: $ROOT
 
 uniq4stamp () {
@@ -24,7 +27,7 @@ uniq4stamp () {
 
 hit=$(uniq4stamp $1) && {
     msg playing: $hit
-    islinux && pi.vjot-play-file  $hit
-    islinux || afplay $hit
+    islinux &&  pi.vjot-play-file  $hit
+    islinux || mac.vjot-play-file $hit
 }
 

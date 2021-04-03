@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+killall afplay 2> /dev/null
+
+(
+    (afplay $1) > /dev/null 2> /dev/null
+    (
+        (say -r 1000 beep) & TASK_PID=$! 
+        (sleep 0.1) 
+        (kill -s SIGINT $TASK_PID) 
+    ) > /dev/null
+) &
+
+
+
