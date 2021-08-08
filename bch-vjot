@@ -1,2 +1,15 @@
 export PATH=${PATH}:$(dirname $0)/bin
+export this=$0
+usage () {
+    echo USAGE:
+    echo "    $(basename $this) SUBCOMMAND"
+    echo SUBCOMMANDS:
+    for name in $(ls $(dirname $this)/bin); do
+        echo "    $name"
+    done
+}
+
+[ "$1" = "" ] && usage && exit
+[ "$1" = "-h" ] && usage && exit
+[ "$1" = "--help" ] && usage && exit
 $*
