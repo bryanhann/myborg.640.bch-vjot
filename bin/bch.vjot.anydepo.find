@@ -1,0 +1,6 @@
+#!/bin/sh
+
+eval $(bch.mnt.scan)
+
+[ ! -z "${DEVICE_SeagateBlue_VJOT_ACC}" ] && echo "${DEVICE_SeagateBlue_VJOT_ACC}" && exit
+[ ! -z "${DEVICE_BCH16_VJOT_ACC}"       ] && echo "${DEVICE_BCH16_VJOT_ACC}" && exit

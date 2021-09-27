@@ -7,16 +7,22 @@ islinux () { echo ${OSTYPE} | grep -q linux ; }
 
 msg ++ [$*]
 
-BLUE=$( mydts uniq MYENV_SEAGATE_BLUE )
-DEPO=$( mydts uniq  MYENV_VJOT_DEPO )
-[ ! -z "${BLUE}" ] && ROOT=${BLUE}/backups/rsync.ws852
-[   -z "${BLUE}" ] && ROOT=${DEPO}
+#BLUE=$( mydts uniq MYENV_SEAGATE_BLUE )
+#DEPO=$( mydts uniq  MYENV_VJOT_DEPO )
+#[ ! -z "${BLUE}" ] && ROOT=${BLUE}/backups/rsync.ws852
+#[   -z "${BLUE}" ] && ROOT=${DEPO}
 
 
 ROOT=$(bch.vjot.anydepo.find)
 [ "$ROOT" = "" ] && msg CANNOT FIND ROOT && exit 1
 
 msg ROOT: $ROOT
+for path in $(find $ROOT -name $1*mp3); do
+    echo $path
+    bch.vjot.playfile $path
+    break
+done
+exit
 
 uniq4stamp () {
     count=0
