@@ -1,5 +1,6 @@
 #!/bin/bash
-
+bch.vjot.beep4stamp $*
+exit
 PROG=$(basename $0)
 
 msg () { echo "[$PROG]: $*"; }

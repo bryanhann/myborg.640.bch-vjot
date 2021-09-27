@@ -1,5 +1,0 @@
-#!/bin/sh
-HERE=$(dirname $0)
-[   "${OSTYPE}" = "darwin17" ] && ${HERE}/mac.vjot-play-file $*
-[ ! "${OSTYPE}" = "darwin17" ] && ${HERE}/pi.vjot-play-file $*
-

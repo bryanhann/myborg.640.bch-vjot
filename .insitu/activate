@@ -1,5 +1,2 @@
 #!/source/this/sh
-cd ..
-
-export PATH=$PATH:$PWD
-export PATH=$PATH:$PWD/bin
+__lbin_default
