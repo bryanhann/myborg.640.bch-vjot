@@ -1,0 +1,17 @@
+#!/bin/bash
+TESTSTAMP=20210808T130054
+
+
+
+main () {
+    path=$(bh.vjot.path4stamp $TESTSTAMP)
+    [ -z "${path}" ] && return 1
+    [ ! -f "${path}" ] && return 2
+    echo $path
+    bch.vjot.playfile.mac $path
+}
+
+main
+echo "[$?]"
+
+

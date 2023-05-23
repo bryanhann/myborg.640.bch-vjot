@@ -1,0 +1,19 @@
+#!/bin/sh
+
+TESTFILE=$0.d/mixkit-wrong-answer-fail-notification-946.wav
+[   "${OSTYPE}" = "darwin17" ] && PLAYER=$0.d/mac
+[ ! "${OSTYPE}" = "darwin17" ] && PLAYER=$0.d/pi
+
+
+[ "$1" == "" ] && {
+    echo HELP
+    exit
+}
+
+[ "$1" == "--test" ] && {
+    $PLAYER $TESTFILE
+    exit
+}
+
+$PLAYER $1
+exit

@@ -13,14 +13,16 @@ msg ++ [$*]
 #[   -z "${BLUE}" ] && ROOT=${DEPO}
 
 
-ROOT=$(bch.vjot.anydepo.find)
+ROOT="/__BCH__/"
+
+#"ROOT=$(bch.vjot.anydepo.find)
 [ "$ROOT" = "" ] && msg CANNOT FIND ROOT && exit 1
 
 msg ROOT: $ROOT
 for path in $(find $ROOT -name $1*mp3); do
     echo $path
-    bch.vjot.playfile $path
-    break
+    #bch.vjot.playfile $path
+    #break
 done
 exit
 

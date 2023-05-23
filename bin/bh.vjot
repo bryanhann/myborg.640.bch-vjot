@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+
+import sys
+from pathlib import Path
+sys.path.append(str( Path(__file__).absolute().parent/'lib'))
+from vjot.constants import TEST_STAMP
+import vjot.functions as FF
+
+USAGE=f"""
+The [bh.vjot] command suite.
+
+USAGE:
+    bh.vjot test
+        -- run tests
+    bh.vjot play4stamp STAMP 
+        -- play the vjot mp3 file with timestamp STAMP
+    bh.vjot select PREFIX
+        -- print list of vjots whose stamp has prefix PREFIX
+"""
+
+def badstamp(stamp):
+    sys.stderr.write(
+        f"[bh.vjot play4stamp]: bad stamp: '{stamp}'\n"
+    )
+    sys.stderr.flush()
+
+def usage():
+    print(USAGE)
+
+def play4stamp(stamp):
+    vjot = FF.vjot4stamp(stamp)
+    if vjot:
+        FF.audio4vjot(vjot)
+        return True
+    else:
+        badstamp(stamp)
+def find4stamp(stamp):
+    vjot = FF.vjot4stamp(stamp)
+    if vjot:
+        print(vjot)
+        return True
+    badstamp(stamp)
+
+def test_find():
+    print( 'testing find4stamp' )
+    if find4stamp(TEST_STAMP):
+        print( 'PASS' )
+    else:
+        print( 'FAIL' )
+
+def test_play():
+    print( 'testing audio4stamp' )
+    if play4stamp(TEST_STAMP):
+        print( 'PASS' )
+    else:
+        print( 'FAIL' )
+def select(prefix):
+    for vjot in FF.select(prefix):
+        print(FF.stamp4vjot(vjot))
+if __name__ == '__main__':
+    ARGS = sys.argv[1:] + ['']*5
+    CMD = ARGS.pop(0)
+    if CMD=='play4stamp':
+        play4stamp(ARGS.pop(0))
+    elif CMD=='test':
+        test_find()
+        test_play()
+    elif CMD=='select':
+        select(ARGS.pop(0))
+    else:
+        usage()
+
