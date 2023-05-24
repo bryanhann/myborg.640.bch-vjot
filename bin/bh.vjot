@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import sys
 from pathlib import Path
 sys.path.append(str( Path(__file__).absolute().parent/'lib'))
@@ -12,61 +11,64 @@ The [bh.vjot] command suite.
 USAGE:
     bh.vjot test
         -- run tests
+    bh.vjot vjot4stamp STAMP 
+        -- echo the vjot mp3 file with timestamp STAMP
     bh.vjot play4stamp STAMP 
         -- play the vjot mp3 file with timestamp STAMP
     bh.vjot select PREFIX
-        -- print list of vjots whose stamp has prefix PREFIX
+        -- print list of found stamps with prefix PREFIX
+        use flag '--time' to append duration.
 """
 
-def badstamp(stamp):
-    sys.stderr.write(
-        f"[bh.vjot play4stamp]: bad stamp: '{stamp}'\n"
-    )
-    sys.stderr.flush()
+def cmd_play4stamp(ARGS, FLAGS=[]):
+    stamp=ARGS.pop(0)
+    return FF.audio4stamp(stamp)
 
-def usage():
-    print(USAGE)
-
-def play4stamp(stamp):
+def cmd_vjot4stamp(ARGS,FLAGS=[]):
+    stamp=ARGS.pop(0)
     vjot = FF.vjot4stamp(stamp)
-    if vjot:
-        FF.audio4vjot(vjot)
-        return True
-    else:
-        badstamp(stamp)
-def find4stamp(stamp):
-    vjot = FF.vjot4stamp(stamp)
-    if vjot:
-        print(vjot)
-        return True
-    badstamp(stamp)
+    if vjot: print(vjot)
 
-def test_find():
-    print( 'testing find4stamp' )
-    if find4stamp(TEST_STAMP):
-        print( 'PASS' )
-    else:
-        print( 'FAIL' )
 
-def test_play():
-    print( 'testing audio4stamp' )
-    if play4stamp(TEST_STAMP):
-        print( 'PASS' )
-    else:
-        print( 'FAIL' )
-def select(prefix):
+def cmd_test(ARGS,FLAGS):
+    def _test_vjot():
+        print( 'testing cmd_vjot4stamp' )
+        if cmd_vjot4stamp( [TEST_STAMP] ): print( 'PASS' )
+        else: print( 'FAIL' )
+
+    def _test_play():
+        print( 'testing cmd_play4stamp' )
+        if cmd_play4stamp([TEST_STAMP]): print( 'PASS' )
+        else: print( 'FAIL' )
+
+    _test_vjot()
+    _test_play()
+
+def cmd_select(ARGS,FLAGS):
+    prefix = ARGS and ARGS.pop(0) or ''
     for vjot in FF.select(prefix):
-        print(FF.stamp4vjot(vjot))
+        stamp=FF.stamp4vjot(vjot)
+        if '--time' in FLAGS:
+            length = FF.length4vjot(vjot)
+            length = f"[{length}s]"
+        else:
+            length=''
+        print(FF.stamp4vjot(vjot), length)
+
+CMD_TABLE = {}
+CMD_TABLE[ 'test' ] = cmd_test
+CMD_TABLE[ 'select' ] = cmd_select
+CMD_TABLE[ 'vjot4stamp' ] = cmd_vjot4stamp
+CMD_TABLE[ 'play4stamp' ] = cmd_play4stamp
+
 if __name__ == '__main__':
-    ARGS = sys.argv[1:] + ['']*5
-    CMD = ARGS.pop(0)
-    if CMD=='play4stamp':
-        play4stamp(ARGS.pop(0))
-    elif CMD=='test':
-        test_find()
-        test_play()
-    elif CMD=='select':
-        select(ARGS.pop(0))
+    isflag = lambda x : x.startswith( '--' )
+    isarg = lambda x : not x.startswith ('--')
+    ARGS = list( filter(isarg, sys.argv[1:] ) )
+    FLAGS = list( filter(isflag, sys.argv[1:] ) )
+    CMD = ARGS and ARGS.pop(0) or ''
+    if CMD in CMD_TABLE.keys():
+        CMD_TABLE[ CMD ](ARGS,FLAGS)
     else:
-        usage()
+        print(USAGE)
 
